@@ -1,22 +1,13 @@
-import { useState } from 'react';
-import MovieCard from './components/MovieCard';
-import movieListData from './data/movieListData.json';
+import { Routes, Route } from 'react-router-dom';
+import MovieListPage from './pages/MovieListPage';
 import MovieDetail from './components/MovieDetail';
 
 function App() {
-    const [movies, setMovies] = useState(movieListData.results);
-
     return (
-        <div className="movie-list">
-            {movies.map((movie) => (
-                <MovieCard
-                    key={movie.id}
-                    title={movie.title}
-                    poster={movie.poster_path}
-                    rating={movie.vote_average}
-                />
-            ))}
-        </div>
+        <Routes>
+            <Route path="/" element={<MovieListPage />} />
+            <Route path="/detail" element={<MovieDetail />} />
+        </Routes>
     );
 }
 
