@@ -13,7 +13,7 @@ function MovieListPage() {
                     key={movie.id}
                     title={movie.title}
                     poster={movie.poster_path}
-                    rating={movie.vote_average}
+                    rating={movie.vote_average.toFixed(2)}
                 />
             ))}
         </div>

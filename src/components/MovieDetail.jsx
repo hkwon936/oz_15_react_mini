@@ -6,16 +6,37 @@ function MovieDetail() {
     //MovieListPage에서는 useState 사용함.
 
     return (
-        <div className="flex gap-8 p-8">
-            <img
-                className="w-80 rounded-lg shadow-lg"
-                src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                alt={movie.title}
-            />
-            <div className="flex flex-col justify-start">
-                <h2 className="text-3xl font-bold mb-4">{movie.title}</h2>
-                <p className="text-xl font-semibold mb-2">평점: {movie.vote_average}</p>
-                <p className="text-gray-700 leading-relaxed">{movie.overview}</p>
+        <div className="detail-container">
+            <div className="detail-poster">
+                <img
+                    src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                    alt={movie.title}
+                />
+            </div>
+
+            <div className="detail-right">
+                <div className="detail-row">
+                    <div className="detail-title-box">
+                        <h2>{movie.title}</h2>
+                    </div>
+                    <div className="detail-rating-box">
+                        <p>평점: {movie.vote_average.toFixed(2)}</p>
+                    </div>
+                </div>
+
+                <div className="detail-genre">
+                    <p className="detail-label">장르</p>
+                    <p>
+                        {movie.genres
+                            ? movie.genres.map((genre) => genre.name).join(', ')
+                            : movie.genre || '장르 정보 없음'}
+                    </p>
+                </div>
+
+                <div className="detail-overview">
+                    <p className="detail-label">줄거리</p>
+                    <p>{movie.overview}</p>
+                </div>
             </div>
         </div>
     );
