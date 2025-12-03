@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import MovieCard from './components/MovieCard';
 import movieListData from './data/movieListData.json';
+import MovieDetail from './components/MovieDetail';
 
 function App() {
     const [movies, setMovies] = useState(movieListData.results);
