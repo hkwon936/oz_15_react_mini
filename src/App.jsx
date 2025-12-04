@@ -7,7 +7,7 @@ function App() {
     return (
         <Routes>
             <Route element={<Layout />}>
-                <Route path="/" element={<MovieListPage />} />
+                <Route index element={<MovieListPage />} />
                 <Route path="/details" element={<MovieDetail />} />
             </Route>
         </Routes>

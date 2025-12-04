@@ -2,7 +2,7 @@ import { useState } from 'react';
 import movieDetailData from '../data/movieDetailData.json';
 
 function MovieDetail() {
-    const movie = movieDetailData; //useState 필수사항 아니어서 생략함
+    const [movie] = useState(movieDetailData); //useState 필수사항 아니어서 생략함
     //MovieListPage에서는 useState 사용함.
 
     return (
