@@ -18,7 +18,8 @@ function Home() {
     fetch('https://api.themoviedb.org/3/movie/popular?language=ko-KR&page=1', options)
     .then(res => res.json())
     .then(data => {
-        setMovies(data.results);
+        const filteredMovies = data.results.filter(movie => !movie.adult);
+        setMovies(filteredMovies); // 리렌더링 될 state로 반환
     })
     .catch(err => console.error(err));
 }, []);
