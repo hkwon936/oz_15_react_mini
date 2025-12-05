@@ -1,17 +1,17 @@
-import { Routes, Route } from 'react-router-dom';
-import Layout from './components/Layout';
-import MovieListPage from './pages/MovieListPage';
-import MovieDetail from './components/MovieDetail';
+import { Routes, Route } from "react-router-dom";
+import Layout from "./components/Layout";
+import PageHome from "./pages/PageHome";
+import PageDetail from "./pages/PageDetail";
 
 function App() {
-    return (
-        <Routes>
-            <Route element={<Layout />}>
-                <Route path="/" element={<MovieListPage />} />
-                <Route path="/details" element={<MovieDetail />} />
-            </Route>
-        </Routes>
-    );
+  return (
+    <Routes>
+      <Route element={<Layout />}>
+        <Route index element={<PageHome />} />
+        <Route path="details/:id" element={<PageDetail />} />
+      </Route>
+    </Routes>
+  );
 }
 
 export default App;
