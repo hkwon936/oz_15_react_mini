@@ -1,7 +1,7 @@
 import MovieDetail from "../components/MovieDetail";
 import { useParams } from "react-router-dom";
 
-function DetailPage() {
+function PageDetail() {
   const { id } = useParams();
 
   return (
@@ -10,4 +10,4 @@ function DetailPage() {
     </main>
   );
 }
-export default DetailPage;
+export default PageDetail;
