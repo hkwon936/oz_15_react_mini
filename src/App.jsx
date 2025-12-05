@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 import PageHome from "./pages/PageHome";
-import MovieDetail from "./components/MovieDetail";
+import DetailPage from "./pages/PageDetail";
 
 function App() {
   return (

@@ -41,7 +41,7 @@ function PageHome() {
            id={movie.id}
            title={movie.title}
            poster={movie.poster_path}
-           rating={movie.vote_average.toFixed(2)}
+           rating={movie.vote_average?.toFixed(2)} //값이 없을때 발생할 오류를 대비해서 ? 사용
           />
         ))}
       </div>
