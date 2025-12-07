@@ -1,24 +1,35 @@
 import { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, Link } from "react-router-dom";
 import useDebounce from "../hooks/useDebounce";
 
 function NavBar() {
   const [searchText, setSearchText] = useState("");
-  const debounceSearchText = useDebounce(searchText, 500);
+  const debounceSearchText = useDebounce(searchText, 200);
   const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
-    if (debounceSearchText === "") {
-      searchParams.delete("query");
-      setSearchParams(searchParams);
-      return;
-    }
-    setSearchParams({ query: debounceSearchText });
-  }, [debounceSearchText]);
+    const initialQuery = searchParams.get("query") || "";
+    setSearchText(initialQuery);
+  }, []);
+
+  useEffect(() => {
+    setSearchParams((prev) => {
+      const params = new URLSearchParams(prev);
+
+      if (!debounceSearchText) {
+        params.delete("query");
+      } else {
+        params.set("query", debounceSearchText);
+      }
+      return params;
+    });
+  }, [debounceSearchText, setSearchParams]);
 
   return (
     <nav className="navbar">
-      <h1 className="nav_title">🍿Munching Movie</h1>
+      <h1 className="nav_title">
+        <Link to="/">🍿Munching Movies</Link>
+      </h1>
 
       <div className="nav_search">
         <input

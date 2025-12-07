@@ -1,35 +1,49 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import MovieCard from "../components/MovieCard";
-import { TMDB_BASE_URL, TMDB_HEADERS } from "../api/tmdb";
+import { TMDB_BASE_URL, TMDB_HEADERS, searchMovies } from "../api/tmdb";
 
 function PageHome() {
   const [movies, setMovies] = useState([]);
+  const [searchParams] = useSearchParams();
+  const query = searchParams.get("query") || "";
 
   useEffect(() => {
-    const fetchPopularMovies = async () => {
+    const fetchMovies = async () => {
       try {
-        const response = await fetch(
-          `${TMDB_BASE_URL}/movie/popular?language=ko-KR&page=1`,
-          {
-            method: "GET",
-            headers: TMDB_HEADERS,
+        if (!query) {
+          const response = await fetch(
+            `${TMDB_BASE_URL}/movie/popular?language=ko-KR&page=1`,
+            {
+              method: "GET",
+              headers: TMDB_HEADERS,
+            }
+          );
+          if (!response.ok) {
+            throw new Error(`인기 영화 API 호출 실패: ${response.status}`);
           }
-        );
-        if (!Response.ok) {
-          throw new Error(`인기 영화 API 호출 실패: ${Response.status}`);
+          const data = await response.json();
+          const filteredMovies = data.results.filter((movie) => !movie.adult);
+          setMovies(filteredMovies); // 리렌더링 될 state로 반환
+        } else {
+          const data = await searchMovies(query);
+          const filteredMovies = data.results.filter((movie) => !movie.adult);
+          setMovies(filteredMovies);
         }
-        const data = await Response.json();
-        const filteredMovies = data.results.filter((movie) => !movie.adult);
-        setMovies(filteredMovies); // 리렌더링 될 state로 반환
       } catch (error) {
         console.error(error);
       }
     };
-    fetchPopularMovies();
-  }, []);
+    fetchMovies();
+  }, [query]);
 
   return (
     <main className="px-6 py-8">
+      {movies.length === 0 && query && (
+        <p className="mb-4 text-sm text-gray-500">
+          &apos;{query}&apos;에 대한 검색 결과가 없습니다.
+        </p>
+      )}
       <div
         className="
         grid gap-8
