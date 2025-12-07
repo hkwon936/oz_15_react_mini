@@ -1,15 +1,32 @@
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
+import useDebounce from "../hooks/useDebounce";
+
 function NavBar() {
+  const [searchText, setSearchText] = useState("");
+  const debounceSearchText = useDebounce(searchText, 500);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  useEffect(() => {
+    if (debounceSearchText === "") {
+      searchParams.delete("query");
+      setSearchParams(searchParams);
+      return;
+    }
+    setSearchParams({ query: debounceSearchText });
+  }, [debounceSearchText]);
+
   return (
     <nav className="navbar">
-      <h1 className="nav_title">
-        🍿Munching Movie
-      </h1>
+      <h1 className="nav_title">🍿Munching Movie</h1>
 
       <div className="nav_search">
         <input
           type="text"
           placeholder="검색어를 입력하세요."
           className="nav_search-input"
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
         />
       </div>
 
