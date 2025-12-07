@@ -28,7 +28,15 @@ function NavBar() {
   return (
     <nav className="navbar">
       <h1 className="nav_title">
-        <Link to="/">🍿Munching Movies</Link>
+        <Link
+          to="/"
+          onClick={() => {
+            setSearchText("");
+            setSearchParams({});
+          }}
+        >
+          🍿Munching Movies
+        </Link>
       </h1>
 
       <div className="nav_search">

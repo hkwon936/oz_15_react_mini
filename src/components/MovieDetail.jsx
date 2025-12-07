@@ -1,40 +1,22 @@
 import { useState, useEffect } from "react";
-import { TMDB_BASE_URL, TMDB_HEADERS } from "../api/tmdb";
+import { fetchMovieDetail } from "../api/tmdb";
 
 function MovieDetail({ id }) {
   const [movie, setMovie] = useState(null);
 
   useEffect(() => {
-    const fetchMovieDetail = async () => {
-      try {
-        const response = await fetch(
-          `${TMDB_BASE_URL}/movie/${id}?language=ko-KR`,
-          {
-            method: "GET",
-            headers: TMDB_HEADERS,
-          }
-        );
-        if(!response.ok){
-          throw new Error(`영화 상세 API 호출 실패: ${response.status}`);
-        }
-        const data = await response.json();
-        setMovie(data);
-      }catch(error){
-        console.error(error);
-      }
+    const loadMovie = async () => {
+      const data = await fetchMovieDetail(id);
+      setMovie(data);
     };
-    fetchMovieDetail();
+    loadMovie();
   }, [id]);
-
-  if (!movie) {
-    return null;
-  }
 
   return (
     <div className="max-w-5xl mx-auto">
       <div className="flex flex-col gap-8 md:flex-row">
         <div className="md:w-1/2">
-          <div className="w-full aspect-[3/4] overflow-hidden rounded-lg shadow-md bg-neutral-200">
+          <div className="w-full aspect-3/4 overflow-hidden rounded-lg shadow-md bg-neutral-200">
             <img
               src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
               alt={movie.title}
