@@ -6,28 +6,25 @@
   }
 }
 
-@layer components{
-  .navbar{
-    @apply
-      flex items-center
+@layer components {
+  .navbar {
+    @apply flex items-center
       justify-between
       px-6 py-3
       bg-neutral-900
       text-white;
   }
 
-  .nav_title{
-    @apply
-      text-xl font-extrabold tracking-tight;
+  .nav_title {
+    @apply text-xl font-extrabold tracking-tight;
   }
 
-  .nav_search{
+  .nav_search {
     @apply flex-1 flex justify-center px-6;
   }
 
-  .nav_search-input{
-    @apply
-      w-full max-w-xl
+  .nav_search-input {
+    @apply w-full max-w-xl
       h-9
       rounded-full
       bg-neutral-200
@@ -38,22 +35,20 @@
       focus:border-neutral-400;
   }
 
-  .nav_buttons{
+  .nav_buttons {
     @apply flex items-center gap-2;
   }
 
-  .nav_login-btn{
-    @apply
-      px-3 py-1
+  .nav_login-btn {
+    @apply px-3 py-1
       text-xs font-medium
       rounded
       bg-white
       text-neutral-900;
   }
 
-  .nav_signup-btn{
-    @apply
-      px-3 py-1
+  .nav_signup-btn {
+    @apply px-3 py-1
       text-xs font-medium
       rounded
       border border-white
