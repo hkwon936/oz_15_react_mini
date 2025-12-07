@@ -1,23 +1,29 @@
 import { useState, useEffect } from "react";
-
-const token = import.meta.env.VITE_TMDB_READ_ACCESS_TOKEN;
+import { TMDB_BASE_URL, TMDB_HEADERS } from "../api/tmdb";
 
 function MovieDetail({ id }) {
   const [movie, setMovie] = useState(null);
 
   useEffect(() => {
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    fetch(`https://api.themoviedb.org/3/movie/${id}?language=ko-KR`, options)
-      .then((res) => res.json())
-      .then((data) => {
+    const fetchMovieDetail = async () => {
+      try {
+        const response = await fetch(
+          `${TMDB_BASE_URL}/movie/${id}?language=ko-KR`,
+          {
+            method: "GET",
+            headers: TMDB_HEADERS,
+          }
+        );
+        if(!response.ok){
+          throw new Error(`영화 상세 API 호출 실패: ${response.status}`);
+        }
+        const data = await response.json();
         setMovie(data);
-      });
+      }catch(error){
+        console.error(error);
+      }
+    };
+    fetchMovieDetail();
   }, [id]);
 
   if (!movie) {
