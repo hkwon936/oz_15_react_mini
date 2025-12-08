@@ -1,11 +1,18 @@
 import { useState, useEffect } from "react";
-import { useSearchParams, Link } from "react-router-dom";
+import {
+  useSearchParams,
+  Link,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
 import useDebounce from "../hooks/useDebounce";
 
 function NavBar() {
   const [searchText, setSearchText] = useState("");
-  const debounceSearchText = useDebounce(searchText, 200);
   const [searchParams, setSearchParams] = useSearchParams();
+  const debouncedSearchText = useDebounce(searchText, 200);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const initialQuery = searchParams.get("query") || "";
@@ -13,28 +20,23 @@ function NavBar() {
   }, []);
 
   useEffect(() => {
-    setSearchParams((prev) => {
-      const params = new URLSearchParams(prev);
+    if (!debouncedSearchText) {
+      setSearchParams({});
+    } else {
+      setSearchParams({ query: debouncedSearchText });
+    }
+  }, [debouncedSearchText, setSearchParams]);
 
-      if (!debounceSearchText) {
-        params.delete("query");
-      } else {
-        params.set("query", debounceSearchText);
-      }
-      return params;
-    });
-  }, [debounceSearchText, setSearchParams]);
+  const handleLogoClick = () => {
+    setSearchText("");
+    setSearchParams({});
+    navigate("/");
+  };
 
   return (
     <nav className="navbar">
       <h1 className="nav_title">
-        <Link
-          to="/"
-          onClick={() => {
-            setSearchText("");
-            setSearchParams({});
-          }}
-        >
+        <Link to="/" onClick={handleLogoClick}>
           🍿Munching Movies
         </Link>
       </h1>
@@ -45,7 +47,14 @@ function NavBar() {
           placeholder="검색어를 입력하세요."
           className="nav_search-input"
           value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
+          onChange={(e) => {
+            const value = e.target.value;
+            setSearchText(value);
+
+            if (location.pathname !== "/") {
+              navigate("/");
+            }
+          }}
         />
       </div>
 

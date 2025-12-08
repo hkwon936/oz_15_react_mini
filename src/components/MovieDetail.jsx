@@ -5,12 +5,20 @@ function MovieDetail({ id }) {
   const [movie, setMovie] = useState(null);
 
   useEffect(() => {
-    const loadMovie = async () => {
+    async function loadMovie() {
       const data = await fetchMovieDetail(id);
       setMovie(data);
-    };
+    }
     loadMovie();
   }, [id]);
+
+  if(!movie){
+    return(
+      <div>
+        <p>loading...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-5xl mx-auto">
