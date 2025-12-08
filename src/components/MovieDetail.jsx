@@ -1,34 +1,30 @@
 import { useState, useEffect } from "react";
-
-const token = import.meta.env.VITE_TMDB_READ_ACCESS_TOKEN;
+import { fetchMovieDetail } from "../api/tmdb";
 
 function MovieDetail({ id }) {
   const [movie, setMovie] = useState(null);
 
   useEffect(() => {
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    fetch(`https://api.themoviedb.org/3/movie/${id}?language=ko-KR`, options)
-      .then((res) => res.json())
-      .then((data) => {
-        setMovie(data);
-      });
+    async function loadMovie() {
+      const data = await fetchMovieDetail(id);
+      setMovie(data);
+    }
+    loadMovie();
   }, [id]);
 
-  if (!movie) {
-    return null;
+  if(!movie){
+    return(
+      <div>
+        <p>loading...</p>
+      </div>
+    );
   }
 
   return (
     <div className="max-w-5xl mx-auto">
       <div className="flex flex-col gap-8 md:flex-row">
         <div className="md:w-1/2">
-          <div className="w-full aspect-[3/4] overflow-hidden rounded-lg shadow-md bg-neutral-200">
+          <div className="w-full aspect-3/4 overflow-hidden rounded-lg shadow-md bg-neutral-200">
             <img
               src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
               alt={movie.title}

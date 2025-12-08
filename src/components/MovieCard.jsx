@@ -8,8 +8,7 @@ function MovieCard({ id, title, poster, rating }) {
         className="
         bg-white rounded-lg shadow-md
         overflow-hidden
-        cursor-pointer
-        transition-transform transition-shadow
+        cursor-pointer transition-shadow
         hover: -translate-y-1 hover:shadow-lg
         "
       >

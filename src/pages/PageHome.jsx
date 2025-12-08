@@ -1,33 +1,41 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import MovieCard from "../components/MovieCard";
-
-const token = import.meta.env.VITE_TMDB_READ_ACCESS_TOKEN;
+import { fetchPopularMovies, searchMovies } from "../api/tmdb";
 
 function PageHome() {
   const [movies, setMovies] = useState([]);
+  const [searchParams] = useSearchParams();
+  const query = searchParams.get("query") || "";
 
   useEffect(() => {
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    fetch(
-      "https://api.themoviedb.org/3/movie/popular?language=ko-KR&page=1",
-      options
-    )
-      .then((res) => res.json())
-      .then((data) => {
+    const loadMovies = async () => {
+      try {
+        let data;
+
+        if (!query) {
+          data = await fetchPopularMovies(1);
+        } else {
+          data = await searchMovies(query);
+        }
         const filteredMovies = data.results.filter((movie) => !movie.adult);
-        setMovies(filteredMovies); // 리렌더링 될 state로 반환
-      })
-  }, []);
+        setMovies(filteredMovies);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    loadMovies();
+  }, [query]);
 
   return (
     <main className="px-6 py-8">
-      <div className="
+      {movies.length === 0 && query && (
+        <p className="mb-4 text-sm text-gray-500">
+          &apos;{query}&apos;에 대한 검색 결과가 없습니다.
+        </p>
+      )}
+      <div
+        className="
         grid gap-8
         grid-cols-2
         md:grid-cols-3
@@ -37,11 +45,11 @@ function PageHome() {
       >
         {movies.map((movie) => (
           <MovieCard
-           key={movie.id}
-           id={movie.id}
-           title={movie.title}
-           poster={movie.poster_path}
-           rating={movie.vote_average?.toFixed(2)} //값이 없을때 발생할 오류를 대비해서 ? 사용
+            key={movie.id}
+            id={movie.id}
+            title={movie.title}
+            poster={movie.poster_path}
+            rating={movie.vote_average?.toFixed(2)} //값이 없을때 발생할 오류를 대비해서 ? 사용
           />
         ))}
       </div>
